@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "beckProject6",
+  "name": "beckProject7",
   "builds": [
     {
       "src": "src/index.ts",
