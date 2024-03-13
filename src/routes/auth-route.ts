@@ -4,16 +4,23 @@ import {errorValidationBlogs} from "../middlewares/blogsMiddelwares/errorValidat
 import {STATUS_CODE} from "../common/constant-status-code";
 import {loginAndEmailValidationAuth} from "../middlewares/authMiddleware/loginAndEmailValidationAuth";
 import {passwordValidationAuth} from "../middlewares/authMiddleware/passwordValidationAuth";
-import {AuthModel} from "../allTypes/authTypes";
+import {AuthModel, AuthRegistrationModel} from "../allTypes/authTypes";
 import {authService} from "../servisces/auth-service";
 import {tokenJwtServise} from "../servisces/token-jwt-service";
 import {authTokenMiddleware} from "../middlewares/authMiddleware/authTokenMiddleware";
 import {userMaperForMeRequest} from "../mapers/userMaperForMeRequest";
+import {loginValidationUsers} from "../middlewares/usersMiddlewares/loginValidationUsers";
+import {passwordValidationUsers} from "../middlewares/usersMiddlewares/passwordValidationUsers";
+import {emailValidationUsers} from "../middlewares/usersMiddlewares/emailValidationUsers";
+import {isExistLoginMiddleware} from "../middlewares/authMiddleware/isExistLoginMiddleware";
+import {isExistEmailMiddleware} from "../middlewares/authMiddleware/isExistEmailMiddleware";
 
 
 export const authRoute = Router({})
 
 const postValidationAuth = () => [loginAndEmailValidationAuth, passwordValidationAuth]
+
+const postValidationForRegistration = () => [loginValidationUsers, passwordValidationUsers, emailValidationUsers]
 
 
 authRoute.post('/login', postValidationAuth(), errorValidationBlogs, async (req: RequestWithBody<AuthModel>, res: Response) => {
@@ -38,14 +45,26 @@ authRoute.post('/login', postValidationAuth(), errorValidationBlogs, async (req:
 })
 
 
-authRoute.get('/me', authTokenMiddleware,  (req: any, res: Response) => {
+authRoute.get('/me', authTokenMiddleware, (req: any, res: Response) => {
     try {
 
         const userModel = userMaperForMeRequest(req.userIdLoginEmail)
-         res.status(STATUS_CODE.SUCCESS_200).send(userModel)
+        res.status(STATUS_CODE.SUCCESS_200).send(userModel)
 
     } catch (error) {
         console.log(' FIlE auth-routes.ts /me' + error)
+    }
+})
+
+
+authRoute.post('/registration', postValidationForRegistration(), errorValidationBlogs, isExistLoginMiddleware, isExistEmailMiddleware, (req: RequestWithBody<AuthRegistrationModel>, res: Response) => {
+    try {
+
+
+    } catch (error) {
+        console.log(' FIlE auth-routes.ts /registration' + error)
+        //return res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
+        res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
     }
 })
 

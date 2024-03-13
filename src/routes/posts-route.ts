@@ -23,7 +23,6 @@ import {ResultCode} from "../common/object-result";
 import {RequestWithParamsWithQuery} from "../allTypes/RequestWithParamsWithQuery";
 import {QueryInputModalGetCommentsForCorrectPost} from "../allTypes/commentTypes";
 import {commentsQueryRepository} from "../repositories/comments/comments-query-repository";
-import {ObjectId} from "mongodb";
 import {postIdMiddleware} from "../middlewares/postsMiddlewares/postIdMiddleware";
 
 
