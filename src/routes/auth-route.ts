@@ -60,6 +60,8 @@ authRoute.get('/me', authTokenMiddleware, (req: any, res: Response) => {
 authRoute.post('/registration', postValidationForRegistration(), errorValidationBlogs, isExistLoginMiddleware, isExistEmailMiddleware, (req: RequestWithBody<AuthRegistrationModel>, res: Response) => {
     try {
 
+        const newUser= authService.registerUser(req.body.login,req.body.email,req.body.password)
+
 
     } catch (error) {
         console.log(' FIlE auth-routes.ts /registration' + error)
