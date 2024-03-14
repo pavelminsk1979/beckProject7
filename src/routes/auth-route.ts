@@ -14,6 +14,7 @@ import {passwordValidationUsers} from "../middlewares/usersMiddlewares/passwordV
 import {emailValidationUsers} from "../middlewares/usersMiddlewares/emailValidationUsers";
 import {isExistLoginMiddleware} from "../middlewares/authMiddleware/isExistLoginMiddleware";
 import {isExistEmailMiddleware} from "../middlewares/authMiddleware/isExistEmailMiddleware";
+import {sendLetterMailUserRegistrationService} from "../servisces/send-letter-mail-user-registration-service";
 
 
 export const authRoute = Router({})
@@ -71,5 +72,10 @@ authRoute.post('/registration', postValidationForRegistration(), errorValidation
 })
 
 
+authRoute.post('/s',async(req: any, res: any) => {
+    const result = await sendLetterMailUserRegistrationService.sendMail(req.body.email)
 
+
+    return  res.status(STATUS_CODE.SUCCESS_200).send(result)
+})
 
