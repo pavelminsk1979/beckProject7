@@ -20,6 +20,6 @@ export const emailAdapter={
         })
 
 
-        return email
+        return !!info
     }
 }
