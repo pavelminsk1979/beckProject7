@@ -53,6 +53,11 @@ export const authService = {
         if (!isCorrectPasword) return null
 
         return user._id.toString()
+    },
 
+
+    async updateConfirmationCode (code:string){
+     return usersRepository.updateValueIsConfirmedForUser(code)
     }
+
 }

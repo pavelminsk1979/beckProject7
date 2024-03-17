@@ -7,11 +7,19 @@ export type CreateUserModel = {
 }
 
 
+ type EmailConfirmation = {
+    confirmationCode: string,
+    expirationDate: Date,
+    isConfirmed:boolean
+}
+
+
 export type User = {
     passwordHash: string,
     login: string,
     email: string,
-    createdAt: Date
+    createdAt: Date,
+    emailConfirmation:EmailConfirmation
 }
 
 export type OutputUser = {

@@ -2,6 +2,7 @@ import {CreateUserModel, OutputUser} from "../allTypes/userTypes";
 import {usersRepository} from "../repositories/users/users-repository";
 import {userQueryRepository} from "../repositories/users/user-query-repository";
 import {hashPasswordService} from "./hash-password-service";
+import {v4 as randomCode} from "uuid";
 
 
 export const usersService = {
@@ -18,7 +19,12 @@ export const usersService = {
             passwordHash,
             login,
             email,
-            createdAt: new Date()
+            createdAt: new Date(),
+            emailConfirmation: {
+                confirmationCode: randomCode(),
+                expirationDate: new Date(),
+                isConfirmed: true
+            }
         }
 
         const result= await usersRepository.createUser(newUser)

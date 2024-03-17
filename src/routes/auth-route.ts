@@ -4,7 +4,7 @@ import {errorValidationBlogs} from "../middlewares/blogsMiddelwares/errorValidat
 import {STATUS_CODE} from "../common/constant-status-code";
 import {loginAndEmailValidationAuth} from "../middlewares/authMiddleware/loginAndEmailValidationAuth";
 import {passwordValidationAuth} from "../middlewares/authMiddleware/passwordValidationAuth";
-import {AuthModel, AuthRegistrationModel} from "../allTypes/authTypes";
+import {AuthCodeConfirmationModel, AuthModel, AuthRegistrationModel} from "../allTypes/authTypes";
 import {authService} from "../servisces/auth-service";
 import {tokenJwtServise} from "../servisces/token-jwt-service";
 import {authTokenMiddleware} from "../middlewares/authMiddleware/authTokenMiddleware";
@@ -14,7 +14,7 @@ import {passwordValidationUsers} from "../middlewares/usersMiddlewares/passwordV
 import {emailValidationUsers} from "../middlewares/usersMiddlewares/emailValidationUsers";
 import {isExistLoginMiddleware} from "../middlewares/authMiddleware/isExistLoginMiddleware";
 import {isExistEmailMiddleware} from "../middlewares/authMiddleware/isExistEmailMiddleware";
-import {emailAdapter} from "../adapters/emailAdapter";
+import {codeConfirmationValidation} from "../middlewares/authMiddleware/codeConfirmationValidation";
 
 
 export const authRoute = Router({})
@@ -46,28 +46,42 @@ authRoute.post('/login', postValidationAuth(), errorValidationBlogs, async (req:
 })
 
 
-authRoute.get('/me', authTokenMiddleware, (req: any, res: Response) => {
+authRoute.get('/me', authTokenMiddleware, async (req: any, res: Response) => {
     try {
 
-        const userModel = userMaperForMeRequest(req.userIdLoginEmail)
+        const userModel = await userMaperForMeRequest(req.userIdLoginEmail)
         res.status(STATUS_CODE.SUCCESS_200).send(userModel)
 
     } catch (error) {
         console.log(' FIlE auth-routes.ts /me' + error)
+        res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
     }
 })
 
 
-authRoute.post('/registration', postValidationForRegistration(), errorValidationBlogs, isExistLoginMiddleware, isExistEmailMiddleware, (req: RequestWithBody<AuthRegistrationModel>, res: Response) => {
+authRoute.post('/registration', postValidationForRegistration(), errorValidationBlogs, isExistLoginMiddleware, isExistEmailMiddleware, async (req: RequestWithBody<AuthRegistrationModel>, res: Response) => {
     try {
-
-        const newUser= authService.registerUser(req.body.login,req.body.email,req.body.password)
+        await authService.registerUser(req.body.login,req.body.email,req.body.password)
 
         res.sendStatus(STATUS_CODE.NO_CONTENT_204)
 
     } catch (error) {
         console.log(' FIlE auth-routes.ts /registration' + error)
-        //return res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
+        res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
+    }
+})
+
+
+
+
+authRoute.post('/registration-confirmation', codeConfirmationValidation,errorValidationBlogs,async (req: RequestWithBody<AuthCodeConfirmationModel>, res: Response) => {
+    try {
+        await authService.updateConfirmationCode(req.body.code)
+
+        res.sendStatus(STATUS_CODE.NO_CONTENT_204)
+
+    } catch (error) {
+        console.log(' FIlE auth-routes.ts /registration' + error)
         res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
     }
 })

@@ -8,3 +8,7 @@ export type AuthRegistrationModel={
     password:string
     email:string
 }
+
+export type AuthCodeConfirmationModel={
+    code:string
+}
