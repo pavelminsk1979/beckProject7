@@ -64,7 +64,15 @@ export const authService = {
     async updateCodeConfirmationAndExpirationDate (email:string){
         const newCode = randomCode()
         const newDate =add(new Date(), {hours: 1, minutes: 2})
-        return usersRepository.updateCodeConfirmationAndExpirationDate(email,newCode,newDate)
+        await usersRepository.updateCodeConfirmationAndExpirationDate(email,newCode,newDate)
+
+        try {
+            emailAdapter.sendEmail(email, newCode)
+        } catch (error) {
+            console.log(' FIlE auth-service.ts  registerUser' + error)
+        }
+
+        return true
     },
 
 }
