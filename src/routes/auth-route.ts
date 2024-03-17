@@ -4,7 +4,7 @@ import {errorValidationBlogs} from "../middlewares/blogsMiddelwares/errorValidat
 import {STATUS_CODE} from "../common/constant-status-code";
 import {loginAndEmailValidationAuth} from "../middlewares/authMiddleware/loginAndEmailValidationAuth";
 import {passwordValidationAuth} from "../middlewares/authMiddleware/passwordValidationAuth";
-import {AuthCodeConfirmationModel, AuthModel, AuthRegistrationModel} from "../allTypes/authTypes";
+import {AuthCodeConfirmationModel, AuthEmailModel, AuthModel, AuthRegistrationModel} from "../allTypes/authTypes";
 import {authService} from "../servisces/auth-service";
 import {tokenJwtServise} from "../servisces/token-jwt-service";
 import {authTokenMiddleware} from "../middlewares/authMiddleware/authTokenMiddleware";
@@ -15,6 +15,7 @@ import {emailValidationUsers} from "../middlewares/usersMiddlewares/emailValidat
 import {isExistLoginMiddleware} from "../middlewares/authMiddleware/isExistLoginMiddleware";
 import {isExistEmailMiddleware} from "../middlewares/authMiddleware/isExistEmailMiddleware";
 import {codeConfirmationValidation} from "../middlewares/authMiddleware/codeConfirmationValidation";
+import {isConfirmedFlagValidation} from "../middlewares/authMiddleware/isConfirmedFlagValidation";
 
 
 export const authRoute = Router({})
@@ -81,7 +82,21 @@ authRoute.post('/registration-confirmation', codeConfirmationValidation,errorVal
         res.sendStatus(STATUS_CODE.NO_CONTENT_204)
 
     } catch (error) {
-        console.log(' FIlE auth-routes.ts /registration' + error)
+        console.log(' FIlE auth-routes.ts /registration-confirmation' + error)
+        res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
+    }
+})
+
+
+
+authRoute.post('/registration-email-resending',emailValidationUsers,isConfirmedFlagValidation,errorValidationBlogs,async (req: RequestWithBody<AuthEmailModel>, res: Response) => {
+    try {
+        await authService.updateCodeConfirmationAndExpirationDate(req.body.email)
+
+        res.sendStatus(STATUS_CODE.NO_CONTENT_204)
+
+    } catch (error) {
+        console.log(' FIlE auth-routes.ts /registration-email-resending' + error)
         res.sendStatus(STATUS_CODE.SERVER_ERROR_500)
     }
 })

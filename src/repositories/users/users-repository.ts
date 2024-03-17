@@ -1,4 +1,4 @@
-import {postsCollection, usersCollection} from "../../db/mongoDb";
+import { usersCollection} from "../../db/mongoDb";
 import {User} from "../../allTypes/userTypes";
 import {ObjectId} from "mongodb";
 
@@ -24,14 +24,28 @@ export const usersRepository={
         })
     },
 
-    async updateValueIsConfirmedForUser(code:string){
+    async findUserByEmail (email:string){
+        return usersCollection.findOne({email})
+    },
+
+    async updateFlagIsConfirmedForUser(code:string){
 
         const result = await usersCollection.updateOne({"emailConfirmation.confirmationCode": code}, {
             $set: {"emailConfirmation.isConfirmed":true}
         })
 
         return !!result.matchedCount
+    },
 
-    }
+
+
+    async updateCodeConfirmationAndExpirationDate(email:string,newCode:string,newDate:Date){
+
+        const result = await usersCollection.updateOne({email}, {
+            $set: {"emailConfirmation.confirmationCode":newCode,"emailConfirmation.expirationDate":newDate}
+        })
+
+        return !!result.matchedCount
+    },
 
 }

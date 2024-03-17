@@ -12,3 +12,7 @@ export type AuthRegistrationModel={
 export type AuthCodeConfirmationModel={
     code:string
 }
+
+export type AuthEmailModel={
+    email:string
+}

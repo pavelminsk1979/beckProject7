@@ -57,7 +57,14 @@ export const authService = {
 
 
     async updateConfirmationCode (code:string){
-     return usersRepository.updateValueIsConfirmedForUser(code)
-    }
+     return usersRepository.updateFlagIsConfirmedForUser(code)
+    },
+
+
+    async updateCodeConfirmationAndExpirationDate (email:string){
+        const newCode = randomCode()
+        const newDate =add(new Date(), {hours: 1, minutes: 2})
+        return usersRepository.updateCodeConfirmationAndExpirationDate(email,newCode,newDate)
+    },
 
 }
