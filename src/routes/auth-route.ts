@@ -63,6 +63,7 @@ authRoute.post('/registration', postValidationForRegistration(), errorValidation
 
         const newUser= authService.registerUser(req.body.login,req.body.email,req.body.password)
 
+        res.sendStatus(STATUS_CODE.NO_CONTENT_204)
 
     } catch (error) {
         console.log(' FIlE auth-routes.ts /registration' + error)
@@ -72,10 +73,4 @@ authRoute.post('/registration', postValidationForRegistration(), errorValidation
 })
 
 
-authRoute.post('/s',async(req: any, res: any) => {
-    const result = await emailAdapter.sendEmail(req.body.email)
-
-
-    return  res.status(STATUS_CODE.SUCCESS_200).send(result)
-})
 

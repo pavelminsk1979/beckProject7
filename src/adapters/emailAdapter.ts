@@ -3,7 +3,7 @@ import nodemailer from 'nodemailer'
 
 
 export const emailAdapter={
-    async sendEmail(email:string){
+    async sendEmail(email:string,confirmationCode:string){
         let transport = await nodemailer.createTransport({
             service:'gmail',
             auth:{
@@ -12,11 +12,16 @@ export const emailAdapter={
             }
         });
 
+        const letter = `<h1>Thank for your registration</h1>
+ <p>To finish registration please follow the link below:
+     <a href='https://somesite.com/confirm-email?code=${confirmationCode}'>complete registration</a>
+ </p>`
+
         let info = await transport.sendMail({
             from:'Pavel',
             to:email,
             subject:'ПОДТВЕРЖДЕНИЕ регистации',
-            html:'<h1>Thank for your registration</h1>',
+            html:letter,
         })
 
 
