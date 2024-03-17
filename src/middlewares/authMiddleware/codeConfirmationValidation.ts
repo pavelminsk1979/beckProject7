@@ -28,6 +28,6 @@ export const codeConfirmationValidation = body('code')
         const isFlagFalse =  findFlag()
         const isValidDate = checkValidDate()
         if(isExistCodeInDB&&isFlagFalse&&isValidDate) return true
-        return false
+        throw new Error('Incorrect code');
     })
     .withMessage('Incorrect code')

@@ -23,6 +23,6 @@ export const isConfirmedFlagValidation = body('email')
         const isFlagFalse =  findFlag()
 
         if(isExistUser&&isFlagFalse) return true
-        return false
+            throw new Error('Incorrect email');
     })
     .withMessage('Incorrect email')

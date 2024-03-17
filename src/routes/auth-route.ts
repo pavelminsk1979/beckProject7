@@ -12,17 +12,17 @@ import {userMaperForMeRequest} from "../mapers/userMaperForMeRequest";
 import {loginValidationUsers} from "../middlewares/usersMiddlewares/loginValidationUsers";
 import {passwordValidationUsers} from "../middlewares/usersMiddlewares/passwordValidationUsers";
 import {emailValidationUsers} from "../middlewares/usersMiddlewares/emailValidationUsers";
-import {isExistLoginMiddleware} from "../middlewares/authMiddleware/isExistLoginMiddleware";
-import {isExistEmailMiddleware} from "../middlewares/authMiddleware/isExistEmailMiddleware";
 import {codeConfirmationValidation} from "../middlewares/authMiddleware/codeConfirmationValidation";
 import {isConfirmedFlagValidation} from "../middlewares/authMiddleware/isConfirmedFlagValidation";
+import {isExistLoginValidator} from "../middlewares/authMiddleware/isExistLoginValidator";
+import {isExistEmailValidation} from "../middlewares/authMiddleware/isExistEmailValidation";
 
 
 export const authRoute = Router({})
 
 const postValidationAuth = () => [loginAndEmailValidationAuth, passwordValidationAuth]
 
-const postValidationForRegistration = () => [loginValidationUsers, passwordValidationUsers, emailValidationUsers]
+const postValidationForRegistration = () => [loginValidationUsers, passwordValidationUsers, emailValidationUsers,isExistLoginValidator,isExistEmailValidation]
 
 
 authRoute.post('/login', postValidationAuth(), errorValidationBlogs, async (req: RequestWithBody<AuthModel>, res: Response) => {
@@ -60,7 +60,7 @@ authRoute.get('/me', authTokenMiddleware, async (req: any, res: Response) => {
 })
 
 
-authRoute.post('/registration', postValidationForRegistration(), errorValidationBlogs, isExistLoginMiddleware, isExistEmailMiddleware, async (req: RequestWithBody<AuthRegistrationModel>, res: Response) => {
+authRoute.post('/registration', postValidationForRegistration(), errorValidationBlogs, async (req: RequestWithBody<AuthRegistrationModel>, res: Response) => {
     try {
         await authService.registerUser(req.body.login,req.body.email,req.body.password)
 

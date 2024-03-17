@@ -17,7 +17,7 @@ describe('/auth',()=>{
 
     const loginNewUser ='3363337'
     const passwordNewUser ='11111pasw'
-    const emailNewUser ='pvink1979@mail.ru'
+    const emailNewUser ='pavelminsk1979@mail.ru'
 
     it("rigistration newUser",async ()=>{
         const res =await req
@@ -41,6 +41,21 @@ describe('/auth',()=>{
 
         console.log(res.body.items)
 
+    })
+
+
+    it(" should return error ,  rigistration newUser, login and email already exist ",async ()=>{
+        const res =await req
+            .post('/auth/registration')
+            .send({ login: loginNewUser,
+                password: passwordNewUser,
+                email:emailNewUser})
+            .expect(STATUS_CODE.BAD_REQUEST_400)
+
+        expect(res.body).toEqual({  errorsMessages: [
+                { message: 'Incorrect login', field: 'login' },
+                { message: 'Incorrect email', field: 'email' }
+            ]})
     })
 
 })
