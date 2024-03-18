@@ -76,6 +76,7 @@ authRoute.post('/registration', postValidationForRegistration(), errorValidation
 
 
 authRoute.post('/registration-confirmation', codeConfirmationValidation,errorValidationBlogs,async (req: RequestWithBody<AuthCodeConfirmationModel>, res: Response) => {
+    debugger
     try {
         await authService.updateConfirmationCode(req.body.code)
 

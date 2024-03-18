@@ -7,7 +7,7 @@ const  req = supertest(app)
 
 describe('/auth',()=>{
 
-/*    beforeAll(async ()=>{
+  /*  beforeAll(async ()=>{
         await req
             .delete ('/testing/all-data')
     })*/
@@ -19,7 +19,7 @@ describe('/auth',()=>{
     const passwordNewUser ='11111pasw'
     const emailNewUser ='pavelminsk1979@mail.ru'
 
-/*    it("rigistration newUser",async ()=>{
+ /*   it("rigistration newUser",async ()=>{
         const res =await req
             .post('/auth/registration')
             .send({ login: loginNewUser,
@@ -52,7 +52,7 @@ describe('/auth',()=>{
                 email:emailNewUser})
             .expect(STATUS_CODE.BAD_REQUEST_400)
 
-        console.log(res.body)
+
 
         expect(res.body).toEqual({  errorsMessages: [
                 { message: 'Incorrect login', field: 'login' },
@@ -60,4 +60,14 @@ describe('/auth',()=>{
             ]})
     })
 
+  /*  it(" confirm registration",async ()=>{
+        const res =await req
+            .post('/auth/registration-confirmation')
+            .send({ code: '53f13d12-c3b3-4318-a0aa-aff15eef3232'})
+            .expect(STATUS_CODE.NO_CONTENT_204)
+        console.log(res.body)
+    })*/
+
 })
+
+

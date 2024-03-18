@@ -15,7 +15,7 @@ const findFlag= () => {
 }
 
 const checkValidDate= () => {
-    if(user.emailConfirmation.expirationDate>new Date()) return false
+    if(user.emailConfirmation.expirationDate < new Date()) return false
     return true
 }
 
@@ -24,9 +24,11 @@ export const codeConfirmationValidation = body('code')
     .trim()
     .exists()
     .custom(async(value) => {
+
         const isExistCodeInDB = await findCode(value)
         const isFlagFalse =  findFlag()
         const isValidDate = checkValidDate()
+
         if(isExistCodeInDB&&isFlagFalse&&isValidDate) return true
         throw new Error('Incorrect code');
     })

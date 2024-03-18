@@ -5,7 +5,7 @@ import {userQueryRepository} from "../../repositories/users/user-query-repositor
 export const isExistLoginValidator = body('login')
     .trim()
     .custom(async (login) => {
-        debugger
+
         const user= await userQueryRepository.findUserByLoginOrEmail(login)
 
         if(user){
