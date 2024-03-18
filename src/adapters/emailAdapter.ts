@@ -1,14 +1,13 @@
 import nodemailer from 'nodemailer'
 
 
-
-export const emailAdapter={
-    async sendEmail(email:string,confirmationCode:string){
-        let transport = await nodemailer.createTransport({
-            service:'gmail',
-            auth:{
-                user:'pavvel.potapov@gmail.com',
-                pass:'cfas asrj bell izdi'
+export const emailAdapter = {
+    async sendEmail(email: string, confirmationCode: string) {
+        let transport =  nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'pavvel.potapov@gmail.com',
+                pass: 'cfas asrj bell izdi'
             }
         });
 
@@ -18,10 +17,10 @@ export const emailAdapter={
  </p>`
 
         let info = await transport.sendMail({
-            from:'Pavel',
-            to:email,
-            subject:'ПОДТВЕРЖДЕНИЕ регистации',
-            html:letter,
+            from: 'Pavel',
+            to: email,
+            subject: 'ПОДТВЕРЖДЕНИЕ регистации',
+            html: letter,
         })
 
 
