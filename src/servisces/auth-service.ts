@@ -28,7 +28,7 @@ export const authService = {
         await usersRepository.createUser(newUser)
 
         try {
-             emailAdapter.sendEmail(newUser.email, newUser.emailConfirmation.confirmationCode)
+            await emailAdapter.sendEmail(newUser.email, newUser.emailConfirmation.confirmationCode)
         } catch (error) {
             console.log(' FIlE auth-service.ts  registerUser' + error)
         }
