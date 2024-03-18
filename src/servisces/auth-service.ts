@@ -67,7 +67,7 @@ export const authService = {
         await usersRepository.updateCodeConfirmationAndExpirationDate(email,newCode,newDate)
 
         try {
-            emailAdapter.sendEmail(email, newCode)
+            await emailAdapter.sendEmail(email, newCode)
         } catch (error) {
             console.log(' FIlE auth-service.ts  updateCodeConfirmationAndExpirationDate' + error)
         }
