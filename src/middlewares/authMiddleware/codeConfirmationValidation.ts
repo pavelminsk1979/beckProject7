@@ -8,18 +8,14 @@ const findCode = async (value:string) => {
     if(user)return true
     return false
 }
-
 const findFlag= () => {
     if(user.emailConfirmation.isConfirmed) return false
     return true
 }
-
 const checkValidDate= () => {
     if(user.emailConfirmation.expirationDate < new Date()) return false
     return true
 }
-
-
 export const codeConfirmationValidation = body('code')
     .trim()
     .exists()

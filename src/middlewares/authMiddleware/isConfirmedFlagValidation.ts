@@ -9,12 +9,10 @@ const find= async (email:string) => {
         if(user)return true
         return false
 }
-
 const findFlag= () => {
         if(user.emailConfirmation.isConfirmed) return false
         return true
 }
-
 
 export const isConfirmedFlagValidation = body('email')
     .trim()

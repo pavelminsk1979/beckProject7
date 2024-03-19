@@ -5,14 +5,10 @@ import {userQueryRepository} from "../../repositories/users/user-query-repositor
 export const isExistLoginValidator = body('login')
     .trim()
     .custom(async (login) => {
-
         const user= await userQueryRepository.findUserByLoginOrEmail(login)
-
         if(user){
             throw new Error('Incorrect login');
         }
-
         return  true
-
     })
     .withMessage('Incorrect login')
