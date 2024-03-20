@@ -1,9 +1,9 @@
 export const createItemsForTest={
     createOneItem(){
         return{
-            login:'kljaf',
-            email:'lkajf@ru',
-            password:'76545987'
+            login:'3363337',
+            email:'pavelminsk1979@mail.ru',
+            password:'11111pasw'
         }
     },
 
@@ -18,5 +18,4 @@ export const createItemsForTest={
         }
         return arrayItems
     }
-
 }
