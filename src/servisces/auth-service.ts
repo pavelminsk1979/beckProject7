@@ -5,6 +5,7 @@ import {usersRepository} from "../repositories/users/users-repository";
 import {v4 as randomCode} from 'uuid';
 import {add} from 'date-fns';
 import {emailAdapter} from "../adapters/emailAdapter";
+import {tokenJwtServise} from "./token-jwt-service";
 
 
 export const authService = {
@@ -56,15 +57,15 @@ export const authService = {
     },
 
 
-    async updateConfirmationCode (code:string){
-     return usersRepository.updateFlagIsConfirmedForUser(code)
+    async updateConfirmationCode(code: string) {
+        return usersRepository.updateFlagIsConfirmedForUser(code)
     },
 
 
-    async updateCodeConfirmationAndExpirationDate (email:string){
+    async updateCodeConfirmationAndExpirationDate(email: string) {
         const newCode = randomCode()
-        const newDate =add(new Date(), {hours: 1, minutes: 2})
-        await usersRepository.updateCodeConfirmationAndExpirationDate(email,newCode,newDate)
+        const newDate = add(new Date(), {hours: 1, minutes: 2})
+        await usersRepository.updateCodeConfirmationAndExpirationDate(email, newCode, newDate)
 
         try {
             await emailAdapter.sendEmail(email, newCode)
@@ -74,5 +75,24 @@ export const authService = {
 
         return true
     },
+
+
+    async checkAccessToken(header: string) {
+        const titleAndToken = header.split(' ')
+        //'Bearer lkdjflksdfjlj889765akljfklaj'
+        if (titleAndToken[0] !== 'Bearer') return false
+
+        const userId = await tokenJwtServise.getUserIdByToken(titleAndToken[1])
+
+        if (!userId) return false
+
+        const user = await userQueryRepository.findUserById(userId)
+
+        if (!user) return false
+
+        return user
+    }
+
+
 
 }

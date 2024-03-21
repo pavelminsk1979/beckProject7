@@ -23,7 +23,7 @@ export const createItemsForTest = {
         return arrayItems
     },
 
-    async registerUserForTest(login, email, passwordHash, code, expirationDate, isConfirmed) {
+    async registerUserForTest(login:any, email:any, passwordHash:any, code:any, expirationDate:any, isConfirmed:any) {
         const newUserForTest = {
             login,
             email,
