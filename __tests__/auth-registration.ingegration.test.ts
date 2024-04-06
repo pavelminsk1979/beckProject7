@@ -2,18 +2,38 @@ import {agent as supertest} from "supertest";
 import {app} from "../src/settings";
 import {authService} from "../src/servisces/auth-service";
 import {createItemsForTest} from "./utils/createItemsForTest";
-import {ObjectId} from "mongodb";
+import {MongoClient, ObjectId} from "mongodb";
 import {emailAdapter} from "../src/adapters/emailAdapter";
+import {MongoMemoryServer} from "mongodb-memory-server";
+import {mongoDb} from "../src/db/mongoDb";
 
 
 const  req = supertest(app)
 
 describe('user registration',()=>{
 
-    beforeAll(async ()=>{
+/*    beforeAll(async ()=>{
         await req
             .delete ('/testing/all-data')
+    })*/
+
+let mongoServ:any
+    beforeAll(async () => {
+        mongoServ = await MongoMemoryServer.create();
+        const uri = mongoServ.getUri();
+        console.log('test', uri);
+        mongoDb.client = new MongoClient(uri);
+
+        await mongoDb.runDb();
     })
+
+
+    afterAll(async () => {
+        await mongoServ.stop()
+    })
+
+
+
 
 const registerUserMethod = authService.registerUser;
 
